@@ -950,7 +950,6 @@
       if (currentUser) {
         saveDataToLocalStorage();
       }
-
       // Kosongkan data lokal
       siswaData = {};
       absensiData = {};
@@ -2127,6 +2126,7 @@ Terima kasih.`;
     document.addEventListener('DOMContentLoaded', function() {
         // Untuk versi tanpa Firebase, dropdown tetap kosong sampai login
         document.getElementById('kelasDropdown').innerHTML = '<option value="">Login terlebih dahulu</option>';
+
         // Periksa status login saat halaman dimuat
         const savedUser = localStorage.getItem('currentUser');
         if (savedUser) {
