@@ -875,23 +875,31 @@
         return;
       }
 
+      // 1. Ambil data pengguna dari localStorage
       const storedUsers = JSON.parse(localStorage.getItem('users')) || {};
+
+      // 2. Periksa apakah email ada dan password cocok
       const user = storedUsers[email];
 
       if (user && user.password === password) {
         // Login berhasil
-        currentUser = email;
+        currentUser = email; // Simpan email pengguna yang login ke variabel lokal
+        localStorage.setItem('currentUser', email); // Simpan ke localStorage agar tetap login setelah refresh
         console.log("Login berhasil untuk:", email);
         showNotification("Login berhasil! Selamat datang.", 3000);
+
+        // 3. Sembunyikan halaman login
         document.getElementById("loginPage").classList.add("hidden");
-        // Tampilkan sidebar dan main content
+
+        // 4. Tampilkan sidebar dan main content
         document.getElementById("sidebar").classList.remove("hidden");
         document.getElementById("main-content").classList.remove("hidden");
-        // Tampilkan email pengguna
+
+        // 5. Tampilkan email pengguna
         document.getElementById("userEmailDisplay").textContent = email;
-        // Muat data dari localStorage berdasarkan email pengguna
+
+        // 6. Muat data dan kelas pengguna dari localStorage
         loadDataFromLocalStorage(email);
-        // Muat kelas yang diampu oleh pengguna
         loadUserClassesFromLocalStorage(email);
       } else {
         showNotification("Email atau password salah!", 5000);
@@ -918,10 +926,11 @@
         return;
       }
 
+      // Simpan pengguna baru
       storedUsers[email] = { password: password };
       localStorage.setItem('users', JSON.stringify(storedUsers));
 
-      // Inisialisasi data kosong untuk pengguna baru
+      // Inisialisasi data kosong untuk pengguna baru di localStorage
       const initialData = {
         siswa: {},
         absensi: {},
@@ -937,24 +946,29 @@
 
     // --- Logout Lokal ---
     function logout() {
-      // Simpan data terakhir sebelum logout
+      // Simpan data terakhir sebelum logout (opsional)
       if (currentUser) {
         saveDataToLocalStorage();
       }
+
       // Kosongkan data lokal
       siswaData = {};
       absensiData = {};
       userClasses = [];
       currentClass = "";
       currentUser = null;
+      localStorage.removeItem('currentUser'); // Hapus dari localStorage
+
       // Tampilkan halaman login
       document.getElementById("loginPage").classList.remove("hidden");
       document.getElementById("username").value = "";
       document.getElementById("password").value = "";
+
       // Sembunyikan halaman lainnya
       document.getElementById("classSelectionPage").classList.add("hidden");
       document.getElementById("sidebar").classList.add("hidden");
       document.getElementById("main-content").classList.add("hidden");
+
       showNotification("Anda telah logout.", 3000);
     }
 
